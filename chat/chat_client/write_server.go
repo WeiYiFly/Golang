@@ -1,20 +1,34 @@
 package main
 
 import (
-	"chat/proto"
 	"encoding/binary"
 	"encoding/json"
 	"fmt"
 	"net"
+	"program/chat/proto"
+	"strings"
 )
 
-func WirteServer(conn net.Conn, cmd, data string) {
+//向服务器发送命令
+func WirteServer(conn net.Conn, strdata string) {
+	fmt.Println("开始===发送")
+	fmt.Println("strdata = ",strdata)
+	var cmd ,data string
+	 strsplie := strings.Split(strdata," ")
+	 if len(strsplie)<1 {
+		fmt.Println("请输入正确的命令")
+		return
+	 }
+	 cmd =strsplie[0]
+	 data =strings.Replace(strdata,strsplie[0],"",1)
+	 data =strings.Trim(data," ")
+
 	//组包
 	var CmdMessage proto.Message
 	CmdMessage.Cmd = cmd
 	CmdMessage.Data = data
 	datajson, err := json.Marshal(CmdMessage) //数据对象转json
-
+	
 	//前面四位是表示内容长度
 	var buf [4]byte
 	packLen := uint32(len(datajson))
@@ -26,6 +40,7 @@ func WirteServer(conn net.Conn, cmd, data string) {
 	//发送内容
 	_, err = conn.Write(datajson)
 	if err != nil {
+		fmt.Println("write data failed")
 		return
 	}
 

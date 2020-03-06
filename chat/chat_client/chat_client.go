@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 )
 
 func main() {
@@ -12,22 +13,27 @@ func main() {
 		return
 	}
 	defer conn.Close()
-
 	//向服务器发送 消息
 	go func() {
-		// 向服务器 发送键盘输入的内容
-		var cmd, data string
+		//从键盘输入内容，给服务器发送内容
+		str :=make([]byte,1024)
 		for {
-			fmt.Scanf("%d %s\n", &cmd, &data)
-			if err != nil {
-				fmt.Println("conn.Read err: ", err)
-				continue
+			n,err := os.Stdin.Read(str) //从键盘读取内容，放在str
+			if err != nil{
+				fmt.Println("OS.Stdin err；",err)
+				return
 			}
 			//conn.Write(str[:n])
-			WirteServer(conn, cmd, data)
+			WirteServer(conn, string(str[:n]))
 		}
 	}()
+
 	//接收服务器的消息
-	ReadServer(conn)
+	//ReadServer(conn)
+	err=readPackage(conn)
+	if err != nil{
+		fmt.Println("readPackage err",err)
+		return
+	}
 
 }
