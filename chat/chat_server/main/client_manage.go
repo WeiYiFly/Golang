@@ -1,11 +1,8 @@
 package main
 
 import (
-//	"net"
 	"fmt"
 )
-
-
 
 type ClientMgr struct {
 	onlineUsers map[int]*Client
@@ -20,10 +17,6 @@ func init() {
 		onlineUsers: make(map[int]*Client, 1024),
 	}
 }
-
-
-
-
 
 func (p *ClientMgr) AddClient(userId int, client *Client) {
 	p.onlineUsers[userId] = client

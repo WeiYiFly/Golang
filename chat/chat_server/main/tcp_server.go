@@ -5,14 +5,14 @@ import (
 	"net"
 )
 
-func runServer(addr string)(err error){
-	l,err := net.Listen("tcp",addr)
-	if err != nil{
+func runServer(addr string) (err error) {
+	l, err := net.Listen("tcp", addr)
+	if err != nil {
 		fmt.Println("listen failed, ", err)
 		return
 	}
-	for{
-		conn,err := l.Accept()
+	for {
+		conn, err := l.Accept()
 		if err != nil {
 			fmt.Println("accept failed, ", err)
 			continue
@@ -22,7 +22,7 @@ func runServer(addr string)(err error){
 	}
 }
 
-func process(conn net.Conn){
+func process(conn net.Conn) {
 	defer conn.Close()
 	client := &Client{
 		conn: conn,
