@@ -14,7 +14,7 @@ func main() {
 	redis.InitRedis("localhost:6379", 16, 1024, time.Second*300)
 
 	//tcp 要最后开启
-	//err := runServer("127.0.0.1:9000")
+	//err := runServer("127.0.0.1:8888")
 	err := runServer("172.16.0.4:8888")
 	if err != nil {
 		fmt.Println("net.Listen err :", err)

@@ -50,9 +50,18 @@ func (p *Client) readPackage() (msg proto.Message, err error) {
 		fmt.Println("协议错误")
 		return
 	}
+	if err !=nil {
+		fmt.Println("协议错误 err:",err)
+		return
+	}
 	var packLen uint32
-	packLen = binary.BigEndian.Uint32(p.buf[0:4])
+	packLen = binary.BigEndian.Uint32(p.buf[0:4])	
+	if packLen>8192 {
+		fmt.Println("协议错误 packLen 太长 ")
+		return
+	}
 	n, err = p.conn.Read(p.buf[0:packLen]) //读取内容
+	
 	if n != int(packLen) {
 		fmt.Println("协议包长度不对")
 		return
